@@ -9,10 +9,19 @@
           "manifest": "./src/webparts/trainingWebPart/TrainingWebPartWebPart.manifest.json"
         }
       ]
+    },
+    "functional-form-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/functionalForm/FunctionalFormWebPart.js",
+          "manifest": "./src/webparts/functionalForm/FunctionalFormWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "TrainingWebPartWebPartStrings": "lib/webparts/trainingWebPart/loc/{locale}.js"
+    "TrainingWebPartWebPartStrings": "lib/webparts/trainingWebPart/loc/{locale}.js",
+    "FunctionalFormWebPartStrings": "lib/webparts/functionalForm/loc/{locale}.js"
   }
 }
