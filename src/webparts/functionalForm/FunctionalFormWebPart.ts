@@ -6,96 +6,33 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { IReadonlyTheme } from '@microsoft/sp-component-base';
-
 import * as strings from 'FunctionalFormWebPartStrings';
 import FunctionalForm from './components/FunctionalForm';
 import { IFunctionalFormProps } from './components/IFunctionalFormProps';
-
 export interface IFunctionalFormWebPartProps {
-  description: string;
+  ListName:string;
 }
-
 export default class FunctionalFormWebPart extends BaseClientSideWebPart<IFunctionalFormWebPartProps> {
-
-  private _isDarkTheme: boolean = false;
-  private _environmentMessage: string = '';
-
-  public render(): void {
+  public async render(): Promise<void> {
     const element: React.ReactElement<IFunctionalFormProps> = React.createElement(
       FunctionalForm,
       {
-        description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName,
-        ListName:"First List",
+       
+     ListName:this.properties.ListName,
         context:this.context,
-        siteurl:this.context.pageContext.web.absoluteUrl
+        siteurl:this.context.pageContext.web.absoluteUrl,
+        departmentOptions:await this.getChoiceFields(this.properties.ListName,this.context.pageContext.web.absoluteUrl,'Department'),
+        genderoptions:await this.getChoiceFields(this.properties.ListName,this.context.pageContext.web.absoluteUrl,'Gender'),
+        skillsoptions:await this.getChoiceFields(this.properties.ListName,this.context.pageContext.web.absoluteUrl,'Skills'),
+        cityoptions:
       }
     );
 
     ReactDom.render(element, this.domElement);
   }
-
-  protected onInit(): Promise<void> {
-    return this._getEnvironmentMessage().then(message => {
-      this._environmentMessage = message;
-    });
-  }
-
-
-
-  private _getEnvironmentMessage(): Promise<string> {
-    if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
-      return this.context.sdks.microsoftTeams.teamsJs.app.getContext()
-        .then(context => {
-          let environmentMessage: string = '';
-          switch (context.app.host.name) {
-            case 'Office': // running in Office
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOffice : strings.AppOfficeEnvironment;
-              break;
-            case 'Outlook': // running in Outlook
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOutlook : strings.AppOutlookEnvironment;
-              break;
-            case 'Teams': // running in Teams
-            case 'TeamsModern':
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentTeams : strings.AppTeamsTabEnvironment;
-              break;
-            default:
-              environmentMessage = strings.UnknownEnvironment;
-          }
-
-          return environmentMessage;
-        });
-    }
-
-    return Promise.resolve(this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment);
-  }
-
-  protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
-    if (!currentTheme) {
-      return;
-    }
-
-    this._isDarkTheme = !!currentTheme.isInverted;
-    const {
-      semanticColors
-    } = currentTheme;
-
-    if (semanticColors) {
-      this.domElement.style.setProperty('--bodyText', semanticColors.bodyText || null);
-      this.domElement.style.setProperty('--link', semanticColors.link || null);
-      this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered || null);
-    }
-
-  }
-
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
   }
-
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
@@ -120,5 +57,55 @@ export default class FunctionalFormWebPart extends BaseClientSideWebPart<IFuncti
         }
       ]
     };
+  }
+  //get chocie
+
+  private async getChoiceFields(ListName:string,siteurl:string,fieldValue:any):Promise<any>{
+    try{
+const response=await fetch(`${siteurl}/_api/web/lists/getbytitle('${ListName}')/fields?$filter=EntityPropertyName eq '${fieldValue}'`,
+
+  {
+    method:'GET',
+    headers:{
+      'Accept':'application/json;odata=nometadata'
+    }
+  }
+);
+if(!response.ok){
+  throw new Error(`Erorr found while reading the choice ${response.text}-${response.statusText}`);
+};
+
+const data=await response.json();
+const choices=data.value[0].Choices;
+return choices.map((items:any)=>({
+  key:items,
+  text:items
+}));
+    }
+    catch(err){
+console.error('err found',err);
+return [];
+    }
+  }
+  //get lookup
+
+  private async getLookup():Promise<any[]>{
+    try{
+const response=await fetch(`${this.context.pageContext.web.absoluteUrl}/_api/web/lists/getbytitle('Cities')/items?$select=Title,ID`,
+  {
+    method:'GET',
+    headers:{
+         'Accept':'application/json;odata=nometadata'
+    }
+  }
+);
+if(!response.ok){
+  throw new Error(`Erorr found while reading the lookup ${response.text}-${response.statusText}`);
+};
+
+    }
+    catch(er){
+
+    }
   }
 }

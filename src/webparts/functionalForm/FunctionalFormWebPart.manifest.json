@@ -22,7 +22,8 @@
     "description": { "default": "FunctionalForm description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "FunctionalForm"
+  
+      "ListName":"First List"
     }
   }]
 }

@@ -22,6 +22,7 @@
   "externals": {},
   "localizedResources": {
     "TrainingWebPartWebPartStrings": "lib/webparts/trainingWebPart/loc/{locale}.js",
-    "FunctionalFormWebPartStrings": "lib/webparts/functionalForm/loc/{locale}.js"
+    "FunctionalFormWebPartStrings": "lib/webparts/functionalForm/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
   }
 }
