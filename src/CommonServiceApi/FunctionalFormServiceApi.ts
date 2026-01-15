@@ -23,7 +23,12 @@ const items=await list.items.add({
     Score:formData.Score,
     Permission:formData.Permission,
     AdminId:formData.AdminId,
-    ManagerId:{results:formData.ManagerId}
+    ManagerId:{results:formData.ManagerId},
+    Department:formData.Department,
+    CityId:formData.City,
+    Gender:formData.Gender,
+    Skills:{results:formData.Skills},
+    DOB:new Date(formData.DOB)
 });
 return items;
 

@@ -4,8 +4,8 @@ export interface IFunctionalFormProps {
   ListName:string;
   context:WebPartContext;
   siteurl:string;
-  departmentOptions:string;
-  genderoptions:string;
+  departmentOptions:string|any;
+  genderoptions:string|any;
   skillsoptions:any;
-  cityoptions:string;
+  cityoptions:string|any;
 }

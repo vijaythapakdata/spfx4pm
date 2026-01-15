@@ -4,8 +4,9 @@ import type { IFunctionalFormProps } from './IFunctionalFormProps';
 import { IFunctionalFormState } from '../../../CommonMethod/IFunctionalFormState';
 import { FunctionalFormServiceClass } from '../../../CommonServiceApi/FunctionalFormServiceApi';
 import { Dialog } from '@microsoft/sp-dialog';
-import { PrimaryButton, TextField ,Slider,Toggle} from '@fluentui/react';
+import { PrimaryButton, TextField ,Slider,Toggle, Dropdown, ChoiceGroup, IDropdownOption, DatePicker} from '@fluentui/react';
 import {  PeoplePicker, PrincipalType } from "@pnp/spfx-controls-react/lib/PeoplePicker";
+import { DatePickerStrings, FormateDate } from '../../../DateFormateFiles/DateValue';
 const  FunctionalForm :React.FC<IFunctionalFormProps>=(props)=>{
   const [formData,setFormData]=React.useState<IFunctionalFormState>({
     Name:"",
@@ -18,7 +19,12 @@ const  FunctionalForm :React.FC<IFunctionalFormProps>=(props)=>{
     Admin:"",
     AdminId:0,
     Manager:[],
-    ManagerId:[]
+    ManagerId:[],
+    Department:"",
+    City:"",
+    Gender:"",
+    Skills:[],
+    DOB:""
   });
   //Get admin single selected people picker method 
   const getAdmin=(items:any[])=>{
@@ -36,7 +42,12 @@ const getManager=(items:any[])=>{
   setFormData(prev=>({...prev,ManagerId:items.map(i=>i.id)}))
 }
 
-  
+  //skills chaneg
+  const onSkillsChange=(event:React.ChangeEvent<HTMLInputElement>,options:IDropdownOption):void=>{
+    // [a,b,c,d][c,d]
+    const selectedkey=options.selected?[...formData.Skills,options?.key as string]:formData.Skills.filter((key)=>key!=options.key);
+    setFormData(prev=>({...prev,Skills:selectedkey}))
+  }
   const createForm=async()=>{
     try{
 const service=new FunctionalFormServiceClass(props.siteurl);
@@ -55,7 +66,12 @@ setFormData({
      Admin:"",
     AdminId:0,
     Manager:[],
-    ManagerId:[]
+    ManagerId:[],
+    Department:"",
+    City:"",
+    Gender:"",
+    Skills:[],
+    DOB:""
 });
     }
     catch(err){
@@ -130,6 +146,43 @@ onChange={(_,checked)=>handleChange("Permission",checked!!)}
     ensureUser={true}
     defaultSelectedUsers={formData.Manager}
     webAbsoluteUrl={props.siteurl}
+    />
+    {/* Dropdown & Choicegroup */}
+     <ChoiceGroup
+    label='Gender'
+    options={props.genderoptions}
+    selectedKey={formData.Gender}
+    onChange={(_,e)=>handleChange("Gender",e?.key as string)}
+    />
+    <Dropdown
+    label='Department'
+    placeholder='--select--'
+    options={props.departmentOptions}
+    selectedKey={formData.Department}
+    onChange={(_,e)=>handleChange("Department",e?.key as string)}
+    />
+     <Dropdown
+    label='City'
+    placeholder='--select--'
+    options={props.cityoptions}
+    selectedKey={formData.City}
+    onChange={(_,e)=>handleChange("City",e?.key as string)}
+    />
+    {/* Multiselect dropdwon */}
+     <Dropdown
+    label='Skills'
+    placeholder='--select--'
+    options={props.skillsoptions}
+   defaultSelectedKeys={formData.Skills}
+    onChange={onSkillsChange}
+    multiSelect
+    />
+    {/* datepicker */}
+    <DatePicker
+    label='Date of Birth'
+    strings={DatePickerStrings}
+    formatDate={FormateDate}
+    onSelectDate={(date)=>setFormData(prev=>({...prev,DOB:date}))}
     />
 <TextField
 label='Full Address'

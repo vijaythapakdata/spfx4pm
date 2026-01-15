@@ -24,7 +24,7 @@ export default class FunctionalFormWebPart extends BaseClientSideWebPart<IFuncti
         departmentOptions:await this.getChoiceFields(this.properties.ListName,this.context.pageContext.web.absoluteUrl,'Department'),
         genderoptions:await this.getChoiceFields(this.properties.ListName,this.context.pageContext.web.absoluteUrl,'Gender'),
         skillsoptions:await this.getChoiceFields(this.properties.ListName,this.context.pageContext.web.absoluteUrl,'Skills'),
-        cityoptions:
+        cityoptions:await this.getLookup()
       }
     );
 
@@ -89,7 +89,7 @@ return [];
   }
   //get lookup
 
-  private async getLookup():Promise<any[]>{
+  private async getLookup():Promise<any>{
     try{
 const response=await fetch(`${this.context.pageContext.web.absoluteUrl}/_api/web/lists/getbytitle('Cities')/items?$select=Title,ID`,
   {
@@ -102,10 +102,15 @@ const response=await fetch(`${this.context.pageContext.web.absoluteUrl}/_api/web
 if(!response.ok){
   throw new Error(`Erorr found while reading the lookup ${response.text}-${response.statusText}`);
 };
-
+const data=await response.json();
+return data.value.map((city:{ID:string,Title:string})=>({
+key:city.ID,
+text:city.Title
+}));
     }
     catch(er){
-
+console.error(er);
+return[]
     }
   }
 }
