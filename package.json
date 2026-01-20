@@ -22,9 +22,12 @@
     "@microsoft/sp-webpart-base": "1.20.0",
     "@pnp/sp": "^2.0.5",
     "@pnp/spfx-controls-react": "^3.21.0",
+    "antd": "^5.27.4",
+    "formik": "^2.4.9",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "tslib": "2.3.1"
+    "tslib": "2.3.1",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@microsoft/eslint-config-spfx": "1.20.2",

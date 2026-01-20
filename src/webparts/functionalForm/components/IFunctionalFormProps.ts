@@ -6,6 +6,6 @@ export interface IFunctionalFormProps {
   siteurl:string;
   departmentOptions:string|any;
   genderoptions:string|any;
-  skillsoptions:any;
-  cityoptions:string|any;
+  skillsoptions?:any;
+  cityoptions?:string|any;
 }

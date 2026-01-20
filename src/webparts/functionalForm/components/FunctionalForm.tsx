@@ -45,7 +45,7 @@ const getManager=(items:any[])=>{
   //skills chaneg
   const onSkillsChange=(event:React.ChangeEvent<HTMLInputElement>,options:IDropdownOption):void=>{
     // [a,b,c,d][c,d]
-    const selectedkey=options.selected?[...formData.Skills,options?.key as string]:formData.Skills.filter((key)=>key!=options.key);
+    const selectedkey=options.selected?[...formData.Skills,options?.key as string]:formData.Skills.filter((key:any)=>key!=options.key);
     setFormData(prev=>({...prev,Skills:selectedkey}))
   }
   const createForm=async()=>{
