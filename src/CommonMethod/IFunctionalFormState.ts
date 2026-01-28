@@ -17,3 +17,17 @@ export interface IFunctionalFormState{
     Skills?:any;
     DOB?:any;
 }
+
+export interface IPaginatedState{
+Key:number;
+Title:string;
+EmailAddress:string;
+Age:number;
+Admin:string;
+City:string;
+}
+
+export interface ILargeListServiceFile{
+    Title:string;
+   
+}
