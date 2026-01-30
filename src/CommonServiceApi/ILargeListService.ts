@@ -42,4 +42,26 @@ console.log(`Fetching more item ${allItems.length}`);
 return allItems;
         }
     }
+
+    //Odata Pagination (Best Approach)
+
+    public async getLargeListItemsOdata(pageSize:number,pageObject:any){
+        let paged;
+        if(pageObject){
+            //load  next batch
+            paged=await pageObject.getNext();
+        }
+        else{
+//load first batch
+paged=await sp.web.lists.getByTitle(ListName.FirstList)
+.items.select("Id","Title").top(pageSize).getPaged();
+        }
+        return{
+            items:paged.results.map((i:any)=>({
+                Id:i.Id,
+                Title:i.Title
+            })),
+            pageObject:paged.hasNext?paged:null
+        }
+    }
 }
