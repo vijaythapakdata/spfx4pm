@@ -74,7 +74,7 @@ onClick={previousPage}
 />
 <PrimaryButton
 text="Next ⏭️"
-disabled={pagedObject}
+disabled={!pagedObject}
 onClick={nextPage}
 />
   </div>
