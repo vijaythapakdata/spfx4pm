@@ -41,6 +41,14 @@
           "manifest": "./src/webparts/largeListCode/LargeListCodeWebPart.manifest.json"
         }
       ]
+    },
+    "get-allusers-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/getAllusers/GetAllusersWebPart.js",
+          "manifest": "./src/webparts/getAllusers/GetAllusersWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -50,6 +58,7 @@
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
     "FormikValidationWebPartStrings": "lib/webparts/formikValidation/loc/{locale}.js",
     "PaginatedItemsWebPartStrings": "lib/webparts/paginatedItems/loc/{locale}.js",
-    "LargeListCodeWebPartStrings": "lib/webparts/largeListCode/loc/{locale}.js"
+    "LargeListCodeWebPartStrings": "lib/webparts/largeListCode/loc/{locale}.js",
+    "GetAllusersWebPartStrings": "lib/webparts/getAllusers/loc/{locale}.js"
   }
 }

@@ -31,3 +31,13 @@ export interface ILargeListServiceFile{
     Title:string;
    
 }
+export interface IUserInfo{
+    id:string;
+    displayName:string;
+    mail:string;
+    jobTitle?:string;
+    department?:string;
+}
+
+
+// ['@odata.nextLink']
